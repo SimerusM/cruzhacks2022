@@ -2,55 +2,34 @@ import React, { Component, useState } from "react";
 import axios from 'axios';
 
 class Services extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      image: null
-    };
+  state = {
+      selectedFile: null
   }
 
-
-  handleUpload = () => {
-      console.log('Handle Upload')
-      axios.post('http://127.0.0.1:3001/api/hashimage', { value: this.onImageChange.image })
+  fileSelectedHandler = event => {
+      this.setState(
+          {selectedFile: event.target.files[0]}
+      )
+    //   Debug
+    console.log(event.target.files[0])
   }
 
-  // Changes the Image upon user choosing a new file
-  onImageChange = event => {
-    if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
-      this.setState({
-        image: URL.createObjectURL(img)
-      });
-    }
-  };
-
-//   submit(event) {
-//     fetch("http://127.0.0.1:3001/api/hashimage")
-//         .then(response=> response.json())
-//         .then(hash => this.setState({ hash }));
-//     event.preventDefault();
-//   }
+  fileUploadHandler = () => {
+    const fd = new FormData();
+    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
+    console.log(fd.get('image'));
+    axios.post(
+      'http://127.0.0.1:3001/image',
+      fd,
+      {headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => {console.log(res);})
+  }
 
   render() {
     return (
       <div>
-        <div>
-          <div>
-            {/* Testing */}
-            <div style={{ padding: "20px", background: "blue", color: "white"  }}>
-                {/* Displaying Image onto screen */}
-                {/* <img src={this.state.image} /> */}
-
-                {/* Displaying URL of img onto screen */}
-                <h1>{this.state.image}</h1>
-            </div>
-            
-            <h1>Select Image</h1>
-            <input type="file" name="myImage" onChange={this.onImageChange} />
-            <button onClick={this.handleUpload}>Upload</button>
-          </div>
-        </div>
+        <input type="file" onChange={this.fileSelectedHandler}></input>
+        <button onClick={this.fileUploadHandler}>Upload</button>
       </div>
     );
   }
