@@ -19,10 +19,13 @@ var storage = multer.diskStorage({
 });
 upload = multer({ storage: storage });
 
-router.post('/hashimage', upload.single("image"), (req, res, next) => {
+router.post('/hashimage', upload.single("image"), async (req, res, next) => {
   console.log(req.file);
 
-  res.send('received');
+  let hash = await imghash.hash("./uploads/image.png");
+  console.log(hash);
+
+  res.send(hash);
 });
 
 module.exports = router;

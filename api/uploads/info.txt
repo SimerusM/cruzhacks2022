@@ -1,0 +1,4 @@
+This folder stores a temporary file image.png used to hash.
+
+This file exists so that the folder can be uploaded to Github,
+since image.png is gitignored because it will change every time.
