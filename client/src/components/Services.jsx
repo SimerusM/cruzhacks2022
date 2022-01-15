@@ -3,12 +3,6 @@ import axios from 'axios';
 import sha256 from 'crypto-js/sha256';
 
 
-// const {createHash} = require('crypto')
-
-// function hash(string) {
-//   return createHash('sha256').update(string).digest('hex');
-// }
-
 class Services extends Component {
   state = {
       selectedFile: null,
@@ -36,6 +30,7 @@ class Services extends Component {
   }
 
   onSubmit = (data) => {
+    this.hash(data).then((hex) => console.log(hex));
     console.log(data)
   }
 
@@ -49,6 +44,9 @@ class Services extends Component {
       return hashHex;
     });
   }
+
+  
+  
 
   render() {
     return (
@@ -71,14 +69,14 @@ class Services extends Component {
             {/* <div className="items-center justify-between md:p-12 py-8 px-4">
               <input type="text"/>
             </div>  */}
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit()}>
               {/* <label>
                 <input type="text" name="hash" />
               </label>
               <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
                 <button onClick={() => {console.log('hi')}}>Publish</button>
               </div> */}
-              <input type="text" value="hash" ref={hash(hash)} />
+              <input type="text" />
               <input type="submit" />
             </form>
           </div>
