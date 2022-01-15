@@ -1,6 +1,13 @@
 import React, { Component, useState } from "react";
 import axios from 'axios';
+import sha256 from 'crypto-js/sha256';
 
+
+// const {createHash} = require('crypto')
+
+// function hash(string) {
+//   return createHash('sha256').update(string).digest('hex');
+// }
 
 class Services extends Component {
   state = {
@@ -32,6 +39,17 @@ class Services extends Component {
     console.log(data)
   }
 
+  hash = (string) => {
+    const utf8 = new TextEncoder().encode(string);
+    return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray
+        .map((bytes) => bytes.toString(16).padStart(2, '0'))
+        .join('');
+      return hashHex;
+    });
+  }
+
   render() {
     return (
       <div>
@@ -60,7 +78,7 @@ class Services extends Component {
               <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
                 <button onClick={() => {console.log('hi')}}>Publish</button>
               </div> */}
-              <input type="text" ref={this.hash} />
+              <input type="text" value="hash" ref={hash(hash)} />
               <input type="submit" />
             </form>
           </div>
