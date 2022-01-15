@@ -1,4 +1,5 @@
 var express = require('express');
+var News = require('../../build/contracts/News.json');
 var router = express.Router();
 
 var multer = require('multer');
@@ -26,6 +27,16 @@ router.post('/hashimage', upload.single("image"), async (req, res, next) => {
   console.log(hash);
 
   res.send(hash);
+});
+
+
+router.get('/contract/address', (req, res, next) => {
+  res.send(JSON.stringify({address: properties.contractAddress}));
+});
+
+
+router.get('/contract/abi', (req, res, next) => {
+  res.json(News["abi"]);
 });
 
 module.exports = router;
