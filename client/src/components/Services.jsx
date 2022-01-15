@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { ethers } from "ethers";
 import axios from 'axios';
 
 
@@ -8,11 +9,42 @@ class Services extends Component {
     this.state = {
       selectedFile: null,
       imagesrc: null,
-      hash: ''
+      articleTitle: '',
+
+      imageHash: '',
+      articleHash: ''
     };
   }
 
-  fileSelectedHandler = event => {
+  getContract = async () => {
+    await window.ethereum.send('eth_requestAccounts');
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    let address = (await axios.get('http://127.0.0.1:3001/api/contract/address')).data["address"];
+    let abi = (await axios.get('http://127.0.0.1:3001/api/contract/abi')).data;
+
+    console.log(address); console.log(abi);
+
+    const contract = new ethers.Contract(address, abi, signer);
+    return contract;
+  }
+
+  addImageHash = (imageHash) => {
+    let num = ethers.BigNumber.from('0x' + imageHash);
+    this.getContract()
+      .then(contract => contract.addImage(num));
+  }
+
+  addArticleHash = (articleHash) => {
+    let num = ethers.BigNumber.from('0x' + articleHash);
+    this.getContract()
+      .then(contract => contract.addArticle(num));
+  }
+
+
+
+  fileSelectedHandler = (event) => {
     if (event.target.files && event.target.files[0])
       this.setState({
         selectedFile: event.target.files[0],
@@ -29,22 +61,20 @@ class Services extends Component {
 
   }
 
-  fileUploadHandler = () => {
-    const fd = new FormData();
-    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
-    console.log(fd.get('image'));
-    console.log('Image sent')
-    axios.post('http://127.0.0.1:3001/image',fd,
-        {headers: { 'Content-Type': 'multipart/form-data' }})
-        .then(res => {
-            console.log(res);
-        })
-  }
-
-  onSubmit = (data) => {
-    this.hash(data).then((hex) => console.log(hex));
-    
-    console.log(data)
+  fileUploadHandler = async () => {
+    if (this.state.selectedFile) {
+      const fd = new FormData();
+      fd.append('image', this.state.selectedFile)
+      console.log(fd.get('image'));
+      axios.post(
+        'http://127.0.0.1:3001/api/hashimage',
+        fd,
+        {headers: { 'Content-Type': 'multipart/form-data' }
+      })
+        .then(res => res.data)
+        .then(hex => {console.log(hex); return hex;})
+        .then(hex => this.addArticleHash(hex));
+    }
   }
 
   hash = (string) => {
@@ -59,32 +89,34 @@ class Services extends Component {
 
   }
 
-  fileUploadHandler = () => {
-    const fd = new FormData();
-    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
-    console.log(fd.get('image'));
-    axios.post(
-      'http://127.0.0.1:3001/api/hashimage',
-      fd,
-      {headers: { 'Content-Type': 'multipart/form-data' }
-    }).then(res => {console.log(res);})
+  articleOnChange = (event) => {
+    let title = event.target.value;
+    this.setState({ articleTitle: title.toLowerCase() });
+  }
 
+  articleOnSubmit = (event) => {
+    if (this.state.articleTitle) {
+      console.log(this.state.articleTitle);
+      this.hash(this.state.articleTitle)
+        .then(hex => {console.log(hex); return hex;})
+        .then(hex => this.addImageHash(hex));
+      
+      event.preventDefault();
+    }
   }
 
   render() {
     return (
       <div>
-        <img src={this.state.imagesrc} />
-        <input type="file" onChange={this.fileSelectedHandler}></input>
 
         <div className="flex w-full justify-center items-center gradient-bg-services">
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
               <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
-                Publish articless
+                Publish articles
               </h1>
               <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
-                For publishers to publish headlines
+                Enter your article title
               </p>
             </div>
           
@@ -94,29 +126,28 @@ class Services extends Component {
             {/* <div className="items-center justify-between md:p-12 py-8 px-4">
               <input type="text"/>
             </div>  */}
-            <form onSubmit={this.onSubmit()}>
+            <form onSubmit={this.articleOnSubmit}>
               {/* <label>
                 <input type="text" name="hash" />
               </label>
               <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
                 <button onClick={() => {console.log('hi')}}>Publish</button>
               </div> */}
-              <input type="text" />
+              <input type="text" name="article" onChange={this.articleOnChange}/>
               <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-                <input type="submit" />
+                <input type="submit"/>
               </div>
             </form>
             
           </div>
 
-          <h1>{this.state.hash}</h1>
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
               <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
                 Publish images
               </h1>
               <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
-                For publishers to publish images ...
+                Upload your image
               </p>
             </div>
 
@@ -128,8 +159,6 @@ class Services extends Component {
             </div> 
           </div>
         </div>
-
-        <button onClick={this.fileUploadHandler}>Upload</button>
 
       </div>
     );

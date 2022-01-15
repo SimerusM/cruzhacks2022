@@ -1,5 +1,6 @@
 var express = require('express');
 var News = require('../../build/contracts/News.json');
+var properties = require('../../properties.js');
 var router = express.Router();
 
 var multer = require('multer');
