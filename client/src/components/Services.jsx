@@ -2,14 +2,26 @@ import React, { Component, useState } from "react";
 import axios from 'axios';
 
 class Services extends Component {
-  state = {
-      selectedFile: null
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedFile: null,
+      imagesrc: null
+    };
   }
 
   fileSelectedHandler = event => {
-      this.setState(
-          {selectedFile: event.target.files[0]}
-      )
+    if (event.target.files && event.target.files[0])
+      this.setState({
+        selectedFile: event.target.files[0],
+        imagesrc: URL.createObjectURL(event.target.files[0])
+      });
+    else
+      this.setState({
+        selectedFile: null,
+        imagesrc: null
+      });
+  
     //   Debug
     console.log(event.target.files[0])
   }
@@ -28,6 +40,7 @@ class Services extends Component {
   render() {
     return (
       <div>
+        <img src={this.state.imagesrc} />
         <input type="file" onChange={this.fileSelectedHandler}></input>
         <button onClick={this.fileUploadHandler}>Upload</button>
       </div>
