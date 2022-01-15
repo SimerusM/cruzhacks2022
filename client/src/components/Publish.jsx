@@ -3,16 +3,13 @@ import { ethers } from "ethers";
 import axios from 'axios';
 
 
-class Services extends Component {
+class Publish extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedFile: null,
       imagesrc: null,
       articleTitle: '',
-
-      imageHash: '',
-      articleHash: ''
     };
   }
 
@@ -73,7 +70,7 @@ class Services extends Component {
       })
         .then(res => res.data)
         .then(hex => {console.log(hex); return hex;})
-        .then(hex => this.addArticleHash(hex));
+        .then(hex => this.addImageHash(hex));
     }
   }
 
@@ -99,7 +96,7 @@ class Services extends Component {
       console.log(this.state.articleTitle);
       this.hash(this.state.articleTitle)
         .then(hex => {console.log(hex); return hex;})
-        .then(hex => this.addImageHash(hex));
+        .then(hex => this.addArticleHash(hex));
       
       event.preventDefault();
     }
@@ -164,4 +161,4 @@ class Services extends Component {
     );
   }
 }
-export default Services;
+export default Publish;
