@@ -1,6 +1,5 @@
 import React, { Component, useState } from "react";
 import axios from 'axios';
-import sha256 from 'crypto-js/sha256';
 
 
 class Services extends Component {
@@ -31,6 +30,7 @@ class Services extends Component {
 
   onSubmit = (data) => {
     this.hash(data).then((hex) => console.log(hex));
+    
     console.log(data)
   }
 
@@ -44,9 +44,6 @@ class Services extends Component {
       return hashHex;
     });
   }
-
-  
-  
 
   render() {
     return (
@@ -77,11 +74,14 @@ class Services extends Component {
                 <button onClick={() => {console.log('hi')}}>Publish</button>
               </div> */}
               <input type="text" />
-              <input type="submit" />
+              <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
+                <input type="submit" />
+              </div>
             </form>
+            
           </div>
 
-
+          <h1>{this.state.hash}</h1>
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
               <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
