@@ -6,6 +6,8 @@ class Services extends Component {
   state = {
       selectedFile: null,
       hash: '',
+      selectedFile: null
+
   }
 
   fileSelectedHandler = event => {
@@ -14,6 +16,7 @@ class Services extends Component {
       )
     //   Debug
     console.log(event.target.files[0])
+
   }
 
   fileUploadHandler = () => {
@@ -43,12 +46,26 @@ class Services extends Component {
         .join('');
       return hashHex;
     });
+
+  }
+
+  fileUploadHandler = () => {
+    const fd = new FormData();
+    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
+    console.log(fd.get('image'));
+    axios.post(
+      'http://127.0.0.1:3001/api/hashimage',
+      fd,
+      {headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => {console.log(res);})
+
   }
 
   render() {
     return (
       <div>
         <input type="file" onChange={this.fileSelectedHandler}></input>
+
         <div className="flex w-full justify-center items-center gradient-bg-services">
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
@@ -100,6 +117,9 @@ class Services extends Component {
             </div> 
           </div>
         </div>
+
+        <button onClick={this.fileUploadHandler}>Upload</button>
+
       </div>
     );
   }
