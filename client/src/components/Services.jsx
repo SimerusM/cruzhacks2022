@@ -19,7 +19,7 @@ class Services extends Component {
     fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
     console.log(fd.get('image'));
     axios.post(
-      'http://127.0.0.1:3001/image',
+      'http://127.0.0.1:3001/api/hashimage',
       fd,
       {headers: { 'Content-Type': 'multipart/form-data' }
     }).then(res => {console.log(res);})
