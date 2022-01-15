@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
-var multer = require('multer');
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
@@ -19,17 +18,6 @@ app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, 'image.png')
-  }
-});
-app.use(multer({ storage: storage }).any());
-
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
