@@ -37,9 +37,9 @@ class Verify extends Component {
       .then(valid => {
         console.log(valid);
         if (valid)
-          alert.show("This image is verified!");
+          alert.show("Image is verified!");
         else
-          alert.show("This image is NOT verified.")
+          alert.show("Warning: image not verified.")
       })
       .catch(err => {console.log(err);});
   }
@@ -54,9 +54,9 @@ class Verify extends Component {
       .then(valid => {
         console.log(valid);
         if (valid)
-          alert.show("This article is verified!");
+          alert.show("Article is verified!");
         else
-          alert.show("This article is NOT verified.")
+          alert.show("Warning: article not verified.")
       })
       .catch(err => {console.log(err);});
   }
@@ -114,13 +114,13 @@ class Verify extends Component {
   }
 
   articleOnSubmit = (event) => {
+    event.preventDefault();
     if (this.state.articleTitle && this.state.publisherAddress) {
       console.log(this.state.articleTitle);
       this.hash(this.state.articleTitle)
         .then(hex => {console.log(hex); return hex;})
         .then(hex => this.checkArticleHash(this.state.publisherAddress, hex));
       
-      event.preventDefault();
     }
   }
 
