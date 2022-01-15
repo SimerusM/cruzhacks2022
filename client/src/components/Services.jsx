@@ -1,54 +1,87 @@
 import React, { Component, useState } from "react";
 import axios from 'axios';
 
+
 class Services extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      image: null
-    };
+  state = {
+      selectedFile: null,
+      hash: '',
   }
 
-
-  handleUpload = () => {
-      console.log('Handle Upload')
-      axios.post('http://127.0.0.1:3001/api/hashimage', { value: this.onImageChange.image })
+  fileSelectedHandler = event => {
+      this.setState(
+          {selectedFile: event.target.files[0]}
+      )
+    //   Debug
+    console.log(event.target.files[0])
   }
 
-  // Changes the Image upon user choosing a new file
-  onImageChange = event => {
-    if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
-      this.setState({
-        image: URL.createObjectURL(img)
-      });
-    }
-  };
+  fileUploadHandler = () => {
+    const fd = new FormData();
+    fd.append('image', this.state.selectedFile, this.state.selectedFile.name)
+    console.log(fd.get('image'));
+    console.log('Image sent')
+    axios.post('http://127.0.0.1:3001/image',fd,
+        {headers: { 'Content-Type': 'multipart/form-data' }})
+        .then(res => {
+            console.log(res);
+        })
+  }
 
-//   submit(event) {
-//     fetch("http://127.0.0.1:3001/api/hashimage")
-//         .then(response=> response.json())
-//         .then(hash => this.setState({ hash }));
-//     event.preventDefault();
-//   }
+  onSubmit = (data) => {
+    console.log(data)
+  }
 
   render() {
     return (
       <div>
-        <div>
-          <div>
-            {/* Testing */}
-            <div style={{ padding: "20px", background: "blue", color: "white"  }}>
-                {/* Displaying Image onto screen */}
-                {/* <img src={this.state.image} /> */}
-
-                {/* Displaying URL of img onto screen */}
-                <h1>{this.state.image}</h1>
+        <input type="file" onChange={this.fileSelectedHandler}></input>
+        <div className="flex w-full justify-center items-center gradient-bg-services">
+          <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
+            <div className="flex-1 flex flex-col justify-start items-start">
+              <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
+                Publish articles
+              </h1>
+              <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
+                For publishers to publish headlines
+              </p>
             </div>
-            
-            <h1>Select Image</h1>
-            <input type="file" name="myImage" onChange={this.onImageChange} />
-            <button onClick={this.handleUpload}>Upload</button>
+          
+            {/* <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
+              <button onClick={() => {console.log('hi')}}>Publish</button>
+            </div> */}
+            {/* <div className="items-center justify-between md:p-12 py-8 px-4">
+              <input type="text"/>
+            </div>  */}
+            <form onSubmit={this.onSubmit}>
+              {/* <label>
+                <input type="text" name="hash" />
+              </label>
+              <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
+                <button onClick={() => {console.log('hi')}}>Publish</button>
+              </div> */}
+              <input type="text" ref={this.hash} />
+              <input type="submit" />
+            </form>
+          </div>
+
+
+          <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
+            <div className="flex-1 flex flex-col justify-start items-start">
+              <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
+                Publish images
+              </h1>
+              <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
+                For publishers to publish images ...
+              </p>
+            </div>
+
+            <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
+              <button onClick={this.fileUploadHandler}>Upload</button>
+            </div>
+            <div className="items-center justify-between md:p-12 py-8 px-4 text-white">
+              <input type="file" onChange={this.fileSelectedHandler}></input>
+            </div> 
           </div>
         </div>
       </div>
