@@ -39,17 +39,19 @@ class Publish extends Component {
 
     let address = (await axios.get('http://127.0.0.1:3001/api/contract/address')).data["address"];
     let abi = (await axios.get('http://127.0.0.1:3001/api/contract/abi')).data;
+    let current_address = (await provider.listAccounts())[0];
+    console.log(current_address);
 
     console.log(address); console.log(abi);
 
     const contract = new ethers.Contract(address, abi, signer);
-    return contract;
+    return {contract: contract, address: current_address};
   }
 
   addImageHash = (imageHash) => {
     let num = ethers.BigNumber.from('0x' + imageHash);
     this.getContract()
-      .then(contract => contract.addImage(num))
+      .then(contract => contract.contract.addImage(num))
       .then(res => {
         console.log(res);
       })
@@ -59,7 +61,7 @@ class Publish extends Component {
   addArticleHash = (articleHash) => {
     let num = ethers.BigNumber.from('0x' + articleHash);
     this.getContract()
-      .then(contract => contract.addArticle(num))
+      .then(contract => contract.contract.addArticle(num))
       .then(res => {
         console.log(res);
       })
@@ -158,6 +160,20 @@ class Publish extends Component {
 
         langdata = langres.data;
         console.log(langdata);
+
+        let address = (await this.getContract()).address;
+        console.log(address);
+
+        await axios.post(
+          'http://127.0.0.1:3001/api/addarticle',
+          {
+            sentiment: langdata.sentimentscore,
+            classify: langdata.classify,
+            title: this.state.articleTitle,
+            hex: hex,
+            publisher: address
+          }
+        );
       }
 
       // TODO: finish loading here

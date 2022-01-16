@@ -2,6 +2,7 @@ var express = require('express');
 var News = require('../../build/contracts/News.json');
 var properties = require('../../properties.js');
 var googlelanguage = require('../googlecloud.js');
+var database = require('../database.js');
 var router = express.Router();
 
 var multer = require('multer');
@@ -72,6 +73,81 @@ router.post('/languageanalysis', async (req, res, next) => {
     sentimentmagnitude: sentiment.magnitude,
     classify: classify
   });
+});
+
+
+router.post('/addarticle', (req, res, next) => {
+  const sentiment = req.body.sentiment;
+  const classify = req.body.classify;
+  const title = req.body.title;
+  const titleHash = req.body.hex;
+  const address = req.body.publisher;
+
+  console.log(`Address: ${address}`);
+
+  database.articles.findOne({owner: address, titleHash: titleHash})
+    .then(query => {
+      if (!query) {
+        let article = new database.articles({
+          owner: address,
+          title: title,
+          titleHash: titleHash, 
+          sentiment: sentiment
+        });
+        article.save( err => {
+          if (err) console.log(err);
+
+          for (let name of classify) {
+            let category = new database.categories({
+              name: name,
+              article: article._id
+            });
+            category.save(err => { console.log(err) });
+          }
+        });
+        
+      }
+    });
+  
+  res.sendStatus(200);
+});
+
+router.post('/getarticles', (req, res, next) => {
+  const address = req.body.publisher;
+  if (req.body.sentiment && req.body.category) {
+    database.categories
+      .find({ name: req.body.category })
+      .populate('article')
+      .find({ owner: address, sentiment: (req.body.sentiment == 1 ? {$lte: 0} : {$gte: 0}) })
+      .then(query => {
+        res.send(JSON.stringify(query));
+      })
+      .catch(err => {
+          console.log(err);
+      });
+  }
+  else if (req.body.category) {
+    database.categories
+      .find({ name: req.body.category })
+      .populate('article')
+      .find({ owner: address })
+      .then(query => {
+        res.send(JSON.stringify(query));
+      })
+      .catch(err => {
+          console.log(err);
+      });
+  }
+  else if (req.body.sentiment) {
+    database.articles
+      .find({ owner: address, sentiment: (req.body.sentiment < 0 ? {$lte: 0} : {$gte: 0}) })
+      .then(query => {
+        res.send(JSON.stringify(query));
+      })
+      .catch(err => {
+          console.log(err);
+      });
+  }
 });
 
 module.exports = router;
