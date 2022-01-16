@@ -121,52 +121,54 @@ class Publish extends Component {
     return (
       <div>
         <div className="flex w-full justify-center items-center gradient-bg-services">
-          <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
+          <div className="flex mf:flex-col flex-col items-center justify-between md:p-16 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
             </div>
+            <h1 className="text-white text-3xl sm:text-5xl py-10 text-gradient ">
+                For Publishers
+            </h1>
+            <div className="flex gap-40">
+              {/* Publishing Article */}
+              <div className="p-7 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                  <h3 className="text-white text-3xl py-2 text-gradient ">
+                      Publish articles
+                  </h3>
+                  <Input placeholder="Article Name" name="article" type="text" onChange={this.articleOnChange} />
+                  <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                      {this.state.isLoading
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={() => this.articleOnSubmit(Input.name)}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Send now
+                      </button>
+                      )}
+              </div>
 
-            {/* Publishing Article */}
-            <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-                <h3 className="text-white text-3xl py-2 text-gradient ">
-                    Publish articles
-                </h3>
-                <Input placeholder="Article Name" name="article" type="text" onChange={this.articleOnChange} />
-                <div className="h-[1px] w-full bg-gray-400 my-2"/>
-                    {this.state.isLoading
-                     ? (<Loader />)
-                     : (
-                     <button
-                       type="submit"
-                       onClick={() => this.articleOnSubmit(Input.name)}
-                       className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
-                     >
-                       Send now
-                     </button>
-                    )}
-
+              <div className="p-7 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                  <h3 className="text-white text-3xl py-2 text-gradient ">
+                      Publish images
+                  </h3>
+                  <div className="items-center justify-between md:p-3 py-1 px-5 text-white">
+                    <input type="file" onChange={this.fileSelectedHandler}></input>
+                  </div>
+                  <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                      {this.state.isLoading
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={this.fileUploadHandler}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Upload now
+                      </button>
+                      )}
+              </div>
             </div>
-            {/* </div> */}
-          
-                
-
-
-          <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
-            <div className="flex-1 flex flex-col justify-start items-start">
-              <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
-                Publish images
-              </h1>
-              <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
-                Upload your image
-              </p>
-            </div>
-
-            <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-              <button onClick={this.fileUploadHandler}>Upload</button>
-            </div>
-            <div className="items-center justify-between md:p-12 py-8 px-4 text-white">
-              <input type="file" onChange={this.fileSelectedHandler}></input>
-            </div> 
-          </div>
         </div>
       </div>
     </div>
