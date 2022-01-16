@@ -10,8 +10,8 @@ class Search extends Component {
       sentiment: 0,
       category: '',
       publisherAddress: null,
-      articles: null,
-      orgs: null
+      articles: [],
+      orgs: []
     };
   }
 
@@ -68,8 +68,9 @@ class Search extends Component {
   }
 
   render() {
+    let org, art;
     const orglist = this.state.orgs.map((org) => <li key={org.username}>{org.username}: {org.id}</li>);
-    const articlelist = this.state.articles.map((art) => <li key={art.title}>{org.username}: {art.owner}</li>);
+    const articlelist = this.state.articles.map((art) => <li key={art.title}>{art.title}: {art.owner}</li>);
     return (
       <div>
         <div className="flex gradient-bg-transactions">
@@ -103,9 +104,8 @@ class Search extends Component {
                         Select a sentiment
                     </p>
                     <div onChange={this.sentimentOnChange}>
-                        <input type="radio" value="0" name="sentiment">All</input>
-                        <input type="radio" value="1" name="sentiment">Positive</input>
-                        <input type="radio" value="-1" name="sentiment">Negative</input>
+                        <input type="radio" value="1" name="sentiment" /><label>Positive</label><br/>
+                        <input type="radio" value="-1" name="sentiment" /><label>Negative</label>
                     </div>
                     <button onClick={this.searchArticles}>Search</button>
                 </div>
