@@ -3,6 +3,21 @@ import { ethers } from "ethers";
 import axios from 'axios';
 import { withAlert } from 'react-alert'
 
+const SearchCard = ({ color, title, subtitle }) => (
+  <div className="flex flex-row justify-start items-start white-glassmorphism p-3 m-2 cursor-pointer hover:shadow-xl">
+    <div className={`w-10 h-10 rounded-full flex justify-center items-center ${color}`}>
+      <img src={"https://www.freeiconspng.com/thumbs/search-icon-png/search-icon-png-18.png"}></img>
+    </div>
+    <div className="ml-5 flex flex-col flex-1">
+      <h3 className="mt-2 text-white text-lg">{title}</h3>
+      <p className="mt-1 text-white text-sm md:w-9/12">
+        {subtitle}
+      </p>
+    </div>
+  </div>
+);
+
+
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -73,16 +88,27 @@ class Search extends Component {
     const articlelist = this.state.articles.map((art) => <li key={art.title}>{art.title}: {art.owner}</li>);
     return (
       <div>
-        <div className="flex gradient-bg-transactions">
+        <div className="flex w-full justify-center items-center gradient-bg-services">
             <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
                 <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
-                    <div className="flex-1 flex flex-col justify-start items-start">
+                    <div className="flex-1 flex flex-col items-center justify-start items-start">
                         <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
                             View all organization addresses
                         </h1>
-                        <button onClick={this.searchUsers}>Search</button>
+                        <button onClick={this.searchUsers} className="flex w-full text-white flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]">Search</button>
                     </div>
+
+                    <div className="flex-1 flex flex-col justify-start items-center test-white">
+                      <SearchCard
+                        color=""
+                        title="Organizations"
+                        subtitle={orglist}
+                      />
+                    </div>
+                    {/* <div className="bg-[#181918] m-4 flex-col p-3 rounded-md hover: shadow-2xl">
                     <ul>{orglist}</ul>
+                    </div> */}
+                    
                 </div>
                 
                 <div className="flex-1 flex flex-col justify-start items-start">
