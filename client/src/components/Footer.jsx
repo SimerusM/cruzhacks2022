@@ -11,7 +11,7 @@ const Footer = () => (
     </div>
 
     <div className="flex justify-center items-center flex-col mt-5">
-      <p className="text-white text-sm text-center">(Name of project)</p>
+      <p className="text-white text-sm text-center">NewsChain</p>
     </div>
 
     <div className="sm:w-[90%] w-full h-[0.25px] bg-gray-400 mt-5 " />
