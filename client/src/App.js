@@ -5,7 +5,7 @@ const App = () => {
   return (
     <div className="min-h-screen">
       
-        <Navbar />
+        {/* <Navbar /> */}
         <Router>
           <Routes>
             <Route path='/' exact element={<Homepage /> } />
