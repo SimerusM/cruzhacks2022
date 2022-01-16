@@ -65,7 +65,7 @@ class Login extends React.Component {
 
     render() {
         return this.state.loggedin ? (
-            <div className="flex w-full justify-center items-center gradient-bg-welcome">
+            <div className="">
                 <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
                     
                     {/* Ethereum Card */}
@@ -95,7 +95,7 @@ class Login extends React.Component {
         )
         :
         (
-            <div className="flex w-full justify-center items-center gradient-bg-welcome">
+            <div>
                 <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
                     
                     {/* Ethereum Card */}

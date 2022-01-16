@@ -1,7 +1,8 @@
 import React, { Component, useState } from "react";
 import { ethers } from "ethers";
 import axios from 'axios';
-import { withAlert } from 'react-alert'
+import { withAlert } from 'react-alert';
+import { Loader } from ".";
 
 class Verify extends Component {
   constructor(props) {
@@ -131,9 +132,31 @@ class Verify extends Component {
 
   render() {
     return (
-      <div>
-        <div className="flex gradient-bg-transactions">
-            <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
+      <div className="flex w-full justify-center items-center gradient-bg-transactions ">
+        <div className="flex mf:flex-col flex-col items-center justify-between md:p-16 py-12 px-4">
+
+            {/* <div className="p-7 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                  <h3 className="text-white text-3xl py-2 text-gradient ">
+                      Verify articles
+                  </h3>
+                  <input placeholder="Publisher Address" name="address" type="text" onChange={this.addressOnChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
+                  <input placeholder="Article title" name="article" type="text" onChange={this.articleOnChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
+                  
+                  <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                      {false
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={this.articleOnSubmit}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Send now
+                      </button>
+                      )}
+                    </div> */}
+
+            {/* <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
                 <div className="flex-1 flex flex-col justify-start items-start">
                 <p className="text-center my-2 text-white font-light md:w-9/12 w-11/12 text-base">
                     Enter the publisher address
@@ -141,9 +164,9 @@ class Verify extends Component {
                 </div>
                 <input type="text" name="address" onChange={this.addressOnChange}/>
                 
-            </div>
+            </div> */}
 
-            <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
+            {/* <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
                 <div className="flex-1 flex flex-col justify-start items-start">
                 <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
                     Verify articles
@@ -161,9 +184,9 @@ class Verify extends Component {
                 </div>
                 </form>
                 
-            </div>
+            </div> */}
 
-            <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
+            {/* <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
                 <div className="flex-1 flex flex-col justify-start items-start">
                 <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
                     Verify images
@@ -179,6 +202,74 @@ class Verify extends Component {
                 <div className="items-center justify-between md:p-12 py-8 px-4 text-white">
                 <input type="file" onChange={this.fileSelectedHandler}></input>
                 </div> 
+            </div> */}
+
+
+
+
+            <h1 className="text-white text-3xl sm:text-5xl py-10 text-gradient ">
+                For Users
+            </h1>
+            <div className="flex gap-40">
+              {/* Publishing Article */}
+                <div className="p-7 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                    <h3 className="text-white text-3xl py-2 text-gradient ">
+                      Verify articles
+                    </h3>
+                    <input placeholder="Publisher Address" name="address" type="text" onChange={this.addressOnChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
+                    <input placeholder="Article title" name="article" type="text" onChange={this.articleOnChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
+                  
+                    <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                      {false
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={this.articleOnSubmit}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Send now
+                      </button>
+                      )}
+                </div>
+              
+
+                <div className="p-7 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                  <h3 className="text-white text-3xl py-2 text-gradient ">
+                      Verify images
+                  </h3>
+                  <div className="items-center justify-between md:p-10 py-8 px-4 text-white">
+                    <input type="file" onChange={this.fileSelectedHandler}></input>
+                  </div> 
+                  <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                      {/* {false
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={this.imageUploadHandler}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Upload now
+                      </button>
+                      )}
+               */}
+                      {false
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={this.fileUploadHandler}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Upload now
+                      </button>
+                      )}
+{/*                 
+                    <div className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer">
+                        <button onClick={this.fileUploadHandler}>Upload now</button>
+                    </div> */}
+                </div>
             </div>
         </div>
 

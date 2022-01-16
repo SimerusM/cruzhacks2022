@@ -206,7 +206,7 @@ class Publish extends Component {
                       Publish articles
                   </h3>
                   <Input placeholder="Article Name" name="article" type="text" onChange={this.articleOnHeadlineChange} />
-                  <textarea rows="5" cols="30" placeholder="Enter article text (optional)" onChange={this.articleOnBodyChange}/>
+                  <textarea rows="5" cols="30" placeholder="Enter article text (optional)" onChange={this.articleOnBodyChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
                   <div className="h-[1px] w-full bg-gray-400 my-2"/>
                       {this.state.isArticleLoading
                       ? (<Loader />)
@@ -225,7 +225,7 @@ class Publish extends Component {
                   <h3 className="text-white text-3xl py-2 text-gradient ">
                       Publish images
                   </h3>
-                  <div className="items-center justify-between md:p-3 py-1 px-5 text-white">
+                  <div className="items-center justify-between md:p-12 py-1 px-5 text-white">
                     <input type="file" onChange={this.imageSelectedHandler}></input>
                   </div>
                   <div className="h-[1px] w-full bg-gray-400 my-2"/>
