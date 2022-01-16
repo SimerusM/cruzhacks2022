@@ -1,7 +1,21 @@
 import React, { Component, useState } from "react";
 import { ethers } from "ethers";
 import axios from 'axios';
+import { Loader } from ".";
 
+const commonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
+
+const Input = ({ placeholder, name, type, value, onChange }) => (
+    <input
+      onChange={onChange}
+      placeholder={placeholder}
+      type={type}
+      step="0.0001"
+      value={value}
+      name={value}
+      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+    />
+);
 
 class Publish extends Component {
   constructor(props) {
@@ -10,7 +24,8 @@ class Publish extends Component {
       selectedImage: null,
       imagesrc: null,
       articleTitle: '',
-      articleText: ''
+      articleText: '',
+      isLoading: false
     };
   }
 
@@ -136,40 +151,33 @@ class Publish extends Component {
   render() {
     return (
       <div>
-
         <div className="flex w-full justify-center items-center gradient-bg-services">
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
-              <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
-                Publish articles
-              </h1>
-              <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
-                Enter your article title
-              </p>
             </div>
-          
-            {/* <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-              <button onClick={() => {console.log('hi')}}>Publish</button>
-            </div> */}
-            {/* <div className="items-center justify-between md:p-12 py-8 px-4">
-              <input type="text"/>
-            </div>  */}
-            <form onSubmit={this.articleOnSubmit}>
-              {/* <label>
-                <input type="text" name="hash" />
-              </label>
-              <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-                <button onClick={() => {console.log('hi')}}>Publish</button>
-              </div> */}
-              <input type="text" name="article" onChange={this.articleOnHeadlineChange}/>
-              <textarea rows="5" cols="30" placeholder="Enter article text (optional)" onChange={this.articleOnBodyChange}/>
-              <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-                <input type="submit"/>
-              </div>
-            </form>
-            
-          </div>
 
+            {/* Publishing Article */}
+            <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                <h3 className="text-white text-3xl py-2 text-gradient ">
+                    Publish articles
+                </h3>
+                <Input placeholder="Article Name" name="article" type="text" onChange={this.articleOnHeadlineChange} />
+                <textarea rows="5" cols="30" placeholder="Enter article text (optional)" onChange={this.articleOnBodyChange}/>
+                <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                    {this.state.isLoading
+                     ? (<Loader />)
+                     : (
+                     <button
+                       type="submit"
+                       onClick={this.articleOnSubmit}
+                       className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                     >
+                       Send now
+                     </button>
+                    )}
+
+            </div>          
+          
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
               <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
@@ -188,9 +196,14 @@ class Publish extends Component {
             </div> 
           </div>
         </div>
-
       </div>
+    </div>
     );
   }
 }
 export default Publish;
+
+
+
+
+

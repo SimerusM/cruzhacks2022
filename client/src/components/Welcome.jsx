@@ -84,6 +84,9 @@ const Welcome = () => {
 
                     {/* Input Form */}
                     <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                        <h3 className="text-white text-3xl py-2 text-gradient ">
+                            Publish articles
+                        </h3>
                         <Input placeholder="Address To" name="addressTo" type="text" handleChange={() => {}} />
                         <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={() => {}} />
                         <Input placeholder="Image" name="keyword" type="text" handleChange={() => {}} />
