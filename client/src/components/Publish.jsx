@@ -2,6 +2,8 @@ import React, { Component, useState } from "react";
 import { ethers } from "ethers";
 import axios from 'axios';
 import { Loader } from ".";
+import { withAlert } from 'react-alert'
+
 
 const commonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -25,7 +27,8 @@ class Publish extends Component {
       imagesrc: null,
       articleTitle: '',
       articleText: '',
-      isLoading: false
+      isArticleLoading: false,
+      isImageLoading: false
     };
   }
 
@@ -84,6 +87,10 @@ class Publish extends Component {
 
   imageUploadHandler = async () => {
     if (this.state.selectedImage) {
+      await this.setState({ isImageLoading: true });
+
+      let alert = this.props.alert;
+
       const fd = new FormData();
       fd.append('image', this.state.selectedImage)
       console.log(fd.get('image'));
@@ -99,6 +106,8 @@ class Publish extends Component {
       let res = await this.addImageHash(hex);
       console.log(res);
       // TODO: finish loading here
+      this.setState({ isImageLoading: false });
+      alert.show("Image uploaded with hash " + hex);
     }
   }
 
@@ -127,6 +136,10 @@ class Publish extends Component {
   articleOnSubmit = async (event) => {
     event.preventDefault();
     if (this.state.articleTitle) {
+      await this.setState({ isArticleLoading: true });
+
+      let alert = this.props.alert;
+
       console.log(this.state.articleTitle);
 
       let hex = await this.hash(this.state.articleTitle);
@@ -134,17 +147,28 @@ class Publish extends Component {
 
       let res = await this.addArticleHash(hex);
       console.log(res);
-      // TODO: finish loading here
+
+      let langres, langdata;
 
       if (this.state.articleText) {
-        let langres = await axios.post(
+        langres = await axios.post(
           'http://127.0.0.1:3001/api/languageanalysis',
           { text: this.state.articleText }
         );
 
-        let langdata = langres.data;
+        langdata = langres.data;
         console.log(langdata);
       }
+
+      // TODO: finish loading here
+      this.setState({ isArticleLoading: false });
+      if (this.state.articleText) {
+        alert.show("Article uploaded with hash " + hex);
+        alert.show("Sentiment: " + langdata.sentimentscore.toString().substring(0, 6));
+        alert.show("Categories: " + langdata.classify);
+      }
+      else
+        alert.show("Article uploaded with hash " + hex);
     }
   }
 
@@ -164,7 +188,7 @@ class Publish extends Component {
                 <Input placeholder="Article Name" name="article" type="text" onChange={this.articleOnHeadlineChange} />
                 <textarea rows="5" cols="30" placeholder="Enter article text (optional)" onChange={this.articleOnBodyChange}/>
                 <div className="h-[1px] w-full bg-gray-400 my-2"/>
-                    {this.state.isLoading
+                    {this.state.isArticleLoading
                      ? (<Loader />)
                      : (
                      <button
@@ -176,8 +200,9 @@ class Publish extends Component {
                      </button>
                     )}
 
-            </div>          
+            </div>        
           
+          {/* Publishing Image */}
           <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
             <div className="flex-1 flex flex-col justify-start items-start">
               <h1 className="text-white text-3xl sm:text-5xl py-2 text-gradient ">
@@ -189,7 +214,10 @@ class Publish extends Component {
             </div>
 
             <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-              <button onClick={this.imageUploadHandler}>Upload</button>
+              {this.state.isImageLoading
+                ? (<Loader />)
+                : (<button onClick={this.imageUploadHandler}>Upload</button>)
+              }
             </div>
             <div className="items-center justify-between md:p-12 py-8 px-4 text-white">
               <input type="file" onChange={this.imageSelectedHandler}></input>
@@ -201,7 +229,7 @@ class Publish extends Component {
     );
   }
 }
-export default Publish;
+export default withAlert()(Publish);
 
 
 
