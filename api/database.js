@@ -29,7 +29,15 @@ var categorizeSchema = new Schema({
 
 var categories = db.model('categories', categorizeSchema);
 
+var userSchema = new Schema({
+    id: String, // stores blockchain user/publisher address
+    username: String, // name of organization
+});
+
+var users = db.model('users', userSchema); 
+
 module.exports = {
     categories: categories,
-    articles: articles
+    articles: articles,
+    users: users
 }

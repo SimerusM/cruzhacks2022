@@ -55,10 +55,10 @@ router.get('/getuser', function(req, res, next) {
   database.users.findOne({id: address})
       .then(query => {
         // If backend finds user in database
-          if (query) 
+          if (query)
               res.status(200).send(JSON.stringify(query));
           // else backend reports error
-          else 
+          else
               res.status(404).send(JSON.stringify({error: "No user associated with this address"}));
       })
       .catch(err => {
