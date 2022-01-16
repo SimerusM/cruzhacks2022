@@ -28,8 +28,8 @@ const Welcome = () => {
         <div className="flex w-full justify-center items-center gradient-bg-welcome">
             <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
                 <div className="flex flex-1 justify-start flex-col mf:mr-10">
-                    <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
-                        Figure out if an<br/>article's fake or not
+                    <h1 className="text-3xl sm:text-5xl text-gradient py-10">
+                        NewsChain
                     </h1>
                     <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
                         Combating disinformation by tracking and verifying sources and other critical information for online media.
@@ -37,22 +37,22 @@ const Welcome = () => {
 
                     <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                         <div className={`rounded-tl-2xl ${commonStyles}`}>
-                            Reliable
+                            React
                         </div>
                         <div className={commonStyles}>
-                            Security
+                            Express.js
                         </div>
                         <div className={`rounded-tr-2xl ${commonStyles}`}>
-                            Ethereum
+                            Truffle
                         </div>
                         <div className={`rounded-bl-2xl ${commonStyles}`}>
                             Ethers
                         </div>
                         <div className={commonStyles}>
-                            Low fees
+                            Google NLP
                         </div>
                         <div className={`rounded-br-2xl ${commonStyles}`}>
-                            Blockchain
+                            Node.js
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,8 @@
 import React, { Component, useState } from "react";
 import { ethers } from "ethers";
 import axios from 'axios';
-import { withAlert } from 'react-alert'
+import { withAlert } from 'react-alert';
+import { Loader } from ".";
 
 const SearchCard = ({ color, title, subtitle }) => (
   <div className="flex flex-row justify-start items-start white-glassmorphism p-3 m-2 cursor-pointer hover:shadow-xl">
@@ -88,7 +89,7 @@ class Search extends Component {
     const articlelist = this.state.articles.map((art) => <li key={art.title}>{art.title}: {art.owner}</li>);
     return (
       <div>
-        <div className="flex w-full justify-center items-center gradient-bg-services">
+        <div className="flex w-full justify-center items-center gradient-bg-search">
             <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
                 <div className="flex mf:flex-col flex-col items-center justify-between md:p-20 py-12 px-4">
                     <div className="flex-1 flex flex-col items-center justify-start items-start">
@@ -111,7 +112,42 @@ class Search extends Component {
                     
                 </div>
                 
-                <div className="flex-1 flex flex-col justify-start items-start">
+                <h1 className="text-white py-7 text-3xl sm:text-5xl py-2 text-gradient ">
+                  Enter search options
+                </h1>
+                <div className="p-7 my-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+                  <h3 className="text-white text-3xl py-2 text-gradient ">
+                      Options
+                  </h3>
+                  <input placeholder="Enter publisher address" type="text" name="address" onChange={this.addressOnChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
+                  <input type="text" placeholder="Enter a category (optional)" name="category" onChange={this.categoryOnChange} className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"/>
+                  <p className="text-gradient text-center my-2 text-white font-light md:w-9/12 w-11/12 text-base">
+                    Select a sentiment
+                  </p>
+                  <div onChange={this.sentimentOnChange}>
+                    <input type="radio" value="1" name="sentiment"/><label className="text-white font-light px-2">Positive</label><br/>
+                    <input type="radio" value="-1" name="sentiment" /><label className="text-white font-light px-2">Negative</label>
+                  </div>
+                  <div className="h-[1px] w-full bg-gray-400 my-2"/>
+                      {false
+                      ? (<Loader />)
+                      : (
+                      <button
+                        type="submit"
+                        onClick={this.searchArticles}
+                        className="text-white w-full mt-2 border-[1px] p-3 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                      >
+                        Search
+                      </button>
+                      )}
+                </div>  
+                <div className="flex-1 flex flex-col items-center justify-start items-start">
+                        <h3 className="text-white text-3xl py-2 text-gradient ">
+                            Search option results
+                        </h3>
+                    </div>
+                
+                {/* <div className="flex-1 flex flex-col justify-start items-start">
                     <p className="text-center my-2 text-white font-light md:w-9/12 w-11/12 text-base">
                         Enter the publisher address
                     </p>
@@ -134,8 +170,15 @@ class Search extends Component {
                         <input type="radio" value="-1" name="sentiment" /><label>Negative</label>
                     </div>
                     <button onClick={this.searchArticles}>Search</button>
+                </div> */}
+                <div className="flex-1 flex flex-col justify-start items-center test-white">
+                      <SearchCard
+                        color=""
+                        title="Results"
+                        subtitle={articlelist}
+                      />
                 </div>
-                <ul>{articlelist}</ul>
+                {/* <ul>{articlelist}</ul> */}
             </div>
         </div>
       </div>
