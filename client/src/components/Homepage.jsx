@@ -1,4 +1,4 @@
-import { Publish, Verify, Welcome } from ".";
+import { Publish, Verify, Welcome, Search } from ".";
 
 const Homepage = () => {
     return (
@@ -6,6 +6,7 @@ const Homepage = () => {
             <Welcome/>
             <Publish/>
             <Verify/>
+            <Search/>
         </div>
     );
 }
