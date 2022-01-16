@@ -1,6 +1,7 @@
 var express = require('express');
 var News = require('../../build/contracts/News.json');
 var properties = require('../../properties.js');
+var googlelanguage = require('../googlecloud.js');
 var router = express.Router();
 var database = require('../database');
 
@@ -41,6 +42,7 @@ router.get('/contract/address', (req, res, next) => {
 router.get('/contract/abi', (req, res, next) => {
   res.json(News["abi"]);
 });
+
 
 
 // API endpoints
@@ -101,6 +103,38 @@ router.get('/users', function(req, res, next) {
 
 
 
+
+router.post('/languageanalysis', async (req, res, next) => {
+
+  const text = req.body.text;
+
+  console.log(text);
+
+  const document = {
+    content: text,
+    type: 'PLAIN_TEXT',
+  };
+
+  // Sentiment analysis
+  const [sentimentresult] = await googlelanguage.analyzeSentiment({ document: document });
+  const sentiment = sentimentresult.documentSentiment;
+  console.log(sentiment);
+  // Classification
+  const [classifyresult] = await googlelanguage.classifyText({ document: document });
+  const classify = [];
+  for (let i of classifyresult.categories) {
+    for (let nm of i.name.split('/'))
+      if (nm && !classify.includes(nm))
+        classify.push(nm);
+  }
+  console.log(classify);
+
+  res.json({
+    sentimentscore: sentiment.score,
+    sentimentmagnitude: sentiment.magnitude,
+    classify: classify
+  });
+});
 
 
 module.exports = router;

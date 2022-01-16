@@ -2,3 +2,4 @@ node_modules
 properties.js
 .DS_Store
 image.png
+secret.json
