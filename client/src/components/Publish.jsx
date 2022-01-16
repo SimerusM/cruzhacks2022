@@ -7,9 +7,10 @@ class Publish extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFile: null,
+      selectedImage: null,
       imagesrc: null,
       articleTitle: '',
+      articleText: ''
     };
   }
 
@@ -30,26 +31,34 @@ class Publish extends Component {
   addImageHash = (imageHash) => {
     let num = ethers.BigNumber.from('0x' + imageHash);
     this.getContract()
-      .then(contract => contract.addImage(num));
+      .then(contract => contract.addImage(num))
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {console.log(err);});
   }
 
   addArticleHash = (articleHash) => {
     let num = ethers.BigNumber.from('0x' + articleHash);
     this.getContract()
-      .then(contract => contract.addArticle(num));
+      .then(contract => contract.addArticle(num))
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {console.log(err);});
   }
 
 
 
-  fileSelectedHandler = (event) => {
+  imageSelectedHandler = (event) => {
     if (event.target.files && event.target.files[0])
       this.setState({
-        selectedFile: event.target.files[0],
+        selectedImage: event.target.files[0],
         imagesrc: URL.createObjectURL(event.target.files[0])
       });
     else
       this.setState({
-        selectedFile: null,
+        selectedImage: null,
         imagesrc: null
       });
   
@@ -58,19 +67,23 @@ class Publish extends Component {
 
   }
 
-  fileUploadHandler = async () => {
-    if (this.state.selectedFile) {
+  imageUploadHandler = async () => {
+    if (this.state.selectedImage) {
       const fd = new FormData();
-      fd.append('image', this.state.selectedFile)
+      fd.append('image', this.state.selectedImage)
       console.log(fd.get('image'));
-      axios.post(
+      let imghsh = await axios.post(
         'http://127.0.0.1:3001/api/hashimage',
         fd,
         {headers: { 'Content-Type': 'multipart/form-data' }
-      })
-        .then(res => res.data)
-        .then(hex => {console.log(hex); return hex;})
-        .then(hex => this.addImageHash(hex));
+      });
+
+      let hex = imghsh.data;
+      console.log(hex);
+
+      let res = await this.addImageHash(hex);
+      console.log(res);
+      // TODO: finish loading here
     }
   }
 
@@ -86,19 +99,37 @@ class Publish extends Component {
 
   }
 
-  articleOnChange = (event) => {
+  articleOnHeadlineChange = (event) => {
     let title = event.target.value;
     this.setState({ articleTitle: title.toLowerCase() });
   }
 
-  articleOnSubmit = (event) => {
+  articleOnBodyChange = (event) => {
+    let text = event.target.value;
+    this.setState({ articleText: text });
+  }
+
+  articleOnSubmit = async (event) => {
+    event.preventDefault();
     if (this.state.articleTitle) {
       console.log(this.state.articleTitle);
-      this.hash(this.state.articleTitle)
-        .then(hex => {console.log(hex); return hex;})
-        .then(hex => this.addArticleHash(hex));
-      
-      event.preventDefault();
+
+      let hex = await this.hash(this.state.articleTitle);
+      console.log(hex);
+
+      let res = await this.addArticleHash(hex);
+      console.log(res);
+      // TODO: finish loading here
+
+      if (this.state.articleText) {
+        let langres = await axios.post(
+          'http://127.0.0.1:3001/api/languageanalysis',
+          { text: this.state.articleText }
+        );
+
+        let langdata = langres.data;
+        console.log(langdata);
+      }
     }
   }
 
@@ -130,7 +161,8 @@ class Publish extends Component {
               <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
                 <button onClick={() => {console.log('hi')}}>Publish</button>
               </div> */}
-              <input type="text" name="article" onChange={this.articleOnChange}/>
+              <input type="text" name="article" onChange={this.articleOnHeadlineChange}/>
+              <textarea rows="5" cols="30" placeholder="Enter article text (optional)" onChange={this.articleOnBodyChange}/>
               <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
                 <input type="submit"/>
               </div>
@@ -149,10 +181,10 @@ class Publish extends Component {
             </div>
 
             <div className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer flex-1 flex flex-col justify-start items-center p-7">
-              <button onClick={this.fileUploadHandler}>Upload</button>
+              <button onClick={this.imageUploadHandler}>Upload</button>
             </div>
             <div className="items-center justify-between md:p-12 py-8 px-4 text-white">
-              <input type="file" onChange={this.fileSelectedHandler}></input>
+              <input type="file" onChange={this.imageSelectedHandler}></input>
             </div> 
           </div>
         </div>
